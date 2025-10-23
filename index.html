@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inventario Heladería</title>
+</head>
+<body>
+  <h1>Inventario – Helado Artesanal Poche 🍦</h1>
+
+  <section>
+    <h2>Autenticación</h2>
+    <input id="email" placeholder="Correo electrónico" />
+    <input id="password" type="password" placeholder="Contraseña" />
+    <button id="btnSignup">Registrarse</button>
+    <button id="btnLogin">Iniciar sesión</button>
+    <p id="authStatus"></p>
+  </section>
+
+  <section>
+    <h2>Productos</h2>
+    <button id="btnLoad">Cargar productos</button>
+    <div id="productList">—</div>
+  </section>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
