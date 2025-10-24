@@ -17,11 +17,23 @@
     <p id="authStatus"></p>
   </section>
 
-  <section>
-    <h2>Productos</h2>
-    <button id="btnLoad">Cargar productos</button>
-    <div id="productList">—</div>
-  </section>
+<section>
+  <h2>Productos</h2>
+  <form id="frmProduct" style="margin-bottom:12px;">
+    <input id="pId" type="hidden" />
+    <input id="pSku" placeholder="SKU " required />
+    <input id="pName" placeholder="Nombre del producto" required />
+    <input id="pPrice" placeholder="Precio del producto" required />
+    <input id="pStock" type="number" min="0" placeholder="Stock (opcional)" />
+    <button type="submit">Guardar</button>
+    <button type="button" id="btnCancelEdit" style="display:none;">Cancelar</button>
+    <span id="prodMsg"></span>
+  </form>
+
+  <button id="btnLoad">Cargar productos</button>
+  <div id="productList">—</div>
+</section>
+
 
   <script type="module" src="/src/main.ts"></script>
 </body>
