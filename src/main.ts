@@ -2,12 +2,42 @@ import { supabase } from "./services/supabase";
 
 const $ = (s: string) => document.querySelector(s) as HTMLElement;
 
+let movesVisible = false;
+
+document.getElementById("btnLoadMoves")?.addEventListener("click", async () => {
+  await cargarMovimientos();
+  movesVisible = true;
+});
+
 // Helpers
 const parseMoneyToCents = (s: string) => {
   const n = Number(String(s).replace(/[^\d.]/g, ""));
   return Math.round((isNaN(n) ? 0 : n) * 100);
 };
 const validateSKU = (sku: string) => /^[A-Z0-9\-]{3,}$/.test(sku);
+
+// ===== MOVIMIENTOS: helpers UI =====
+function setMoveMsg(msg: string) {
+  const el = document.getElementById("moveMsg");
+  if (el) el.textContent = msg;
+}
+
+// Rellena el <select> con los productos (para el formulario de movimientos)
+async function fillProductsSelect() {
+  const sel = document.getElementById("mProduct") as HTMLSelectElement | null;
+  if (!sel) return;
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, sku")
+    .order("name");
+
+  if (error) { sel.innerHTML = `<option>Error: ${error.message}</option>`; return; }
+  sel.innerHTML = (data ?? [])
+    .map(p => `<option value="${p.id}">${p.name} (${p.sku})</option>`)
+    .join("");
+}
+
 
 // Auth
 $("#btnSignup")?.addEventListener("click", async () => {
@@ -16,6 +46,37 @@ $("#btnSignup")?.addEventListener("click", async () => {
   const { error } = await supabase.auth.signUp({ email, password });
   $("#authStatus").textContent = error ? error.message : "Revisa tu correo para confirmar 📧";
 });
+
+document.getElementById("frmMove")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  setMoveMsg("");
+
+  const productId = Number((document.getElementById("mProduct") as HTMLSelectElement).value);
+  const tipo = (document.getElementById("mType") as HTMLSelectElement).value as "IN" | "OUT";
+  const cantidad = Number((document.getElementById("mQty") as HTMLInputElement).value);
+  const observacion = (document.getElementById("mNote") as HTMLInputElement).value.trim();
+
+  if (!productId || !cantidad || cantidad <= 0) {
+    setMoveMsg("Completa todos los campos");
+    return;
+  }
+
+  try {
+    await registrarMovimiento(productId, tipo, cantidad, observacion);
+    setMoveMsg("Movimiento registrado ✅");
+
+    // limpiar inputs
+    (document.getElementById("mQty") as HTMLInputElement).value = "";
+    (document.getElementById("mNote") as HTMLInputElement).value = "";
+
+    // refrescar productos para ver el nuevo stock
+    await refreshProducts();
+    if (movesVisible) await cargarMovimientos();
+  } catch (err: any) {
+    setMoveMsg(err.message || "Error registrando movimiento");
+  }
+});
+
 
 $("#btnLogin")?.addEventListener("click", async () => {
   const email = ( $("#email") as HTMLInputElement ).value.trim();
@@ -27,6 +88,9 @@ $("#btnLogin")?.addEventListener("click", async () => {
 supabase.auth.getSession().then(({ data }) => {
   if (data.session) $("#authStatus").textContent = "Sesión activa ✅";
 });
+
+fillProductsSelect();
+
 
 // ---------------- LISTAR + RENDER ----------------
 async function refreshProducts() {
@@ -72,6 +136,46 @@ function render(list: any[]) {
 }
 
 document.querySelector("#btnLoad")?.addEventListener("click", refreshProducts);
+
+// ===== MOVIMIENTOS: registrar y aplicar al stock =====
+async function registrarMovimiento(
+  productId: number,
+  tipo: "IN" | "OUT",
+  cantidad: number,
+  observacion: string
+) {
+  // 1) Traer stock actual para validar OUT
+  const { data: prod, error: prodErr } = await supabase
+    .from("products")
+    .select("stock")
+    .eq("id", productId)
+    .single();
+
+  if (prodErr || !prod) throw new Error("Producto no encontrado");
+  if (tipo === "OUT" && prod.stock < cantidad) {
+    throw new Error(`Stock insuficiente. Disponible: ${prod.stock}`);
+  }
+
+  // 2) Insertar movimiento
+  const { data: userData } = await supabase.auth.getUser();
+  const usuario_email = userData?.user?.email || "desconocido";
+
+  const { error: movErr } = await supabase
+    .from("movimientos")
+    .insert([{ product_id: productId, tipo, cantidad, usuario_email, observacion }]);
+
+  if (movErr) throw movErr;
+
+  // 3) Actualizar stock
+  const delta = tipo === "IN" ? cantidad : -cantidad;
+  const { error: updErr } = await supabase
+    .from("products")
+    .update({ stock: prod.stock + delta })
+    .eq("id", productId);
+
+  if (updErr) throw updErr;
+}
+
 
 // ---------------- FORM: GUARDAR / CANCELAR ----------------
 function setFormMsg(msg: string) { const el = $("#prodMsg"); if (el) el.textContent = msg; }
@@ -122,6 +226,10 @@ async function saveProduct(e: Event) {
       setFormMsg("Producto creado ✅");
     }
     await refreshProducts();
+    await fillProductsSelect(); 
+    if (typeof cargarMovimientos === "function") await cargarMovimientos();
+clearForm();
+    if (movesVisible) await cargarMovimientos();
     clearForm();
   } catch (err: any) {
     setFormMsg(err.message || "Error guardando");
@@ -154,8 +262,54 @@ async function onDelete(this: Element) {
     if (error) throw error;
     setFormMsg(`Producto ${sku} eliminado ✅`);
     await refreshProducts();
+    await fillProductsSelect();
+    if (typeof cargarMovimientos === "function") await cargarMovimientos();
+clearForm();
+    if (movesVisible) await cargarMovimientos();
     clearForm();
   } catch (err: any) {
     setFormMsg(err.message || "Error eliminando");
   }
 }
+async function cargarMovimientos() {
+  const { data, error } = await supabase
+    .from("movimientos")
+    .select("id, tipo, cantidad, observacion, fecha, usuario_email, products(name)")
+    .order("fecha", { ascending: false });
+
+  const wrap = document.getElementById("movesList") as HTMLElement;
+  if (error) { wrap.textContent = error.message; return; }
+
+wrap.innerHTML = `
+<table border="1" cellpadding="6">
+<tr>
+<th>ID</th>
+<th>Tipo</th>
+<th>Producto</th>
+<th>Cantidad</th>
+<th>Fecha</th>
+<th>Observación</th>
+<th>Usuario</th>
+</tr>
+
+    ${(data ?? []).map((m: any) => `
+  <tr>
+    <td>${m.id}</td>
+    <td>${m.tipo}</td>
+    <td>${m.products?.name || "—"}</td>
+    <td>${m.cantidad}</td>
+    <td>${new Date(m.fecha).toLocaleString()}</td>
+    <td>${m.observacion || ""}</td>
+    <td>${m.usuario_email || "—"}</td>
+  </tr>
+`).join("")}
+
+    </table>
+  `;
+}
+
+document.getElementById("btnLoadMoves")?.addEventListener("click", cargarMovimientos);
+
+
+
+

@@ -34,6 +34,27 @@
   <div id="productList">—</div>
 </section>
 
+<section>
+  <h2>Movimientos de inventario</h2>
+
+  <form id="frmMove" style="margin-bottom:12px;">
+    <select id="mProduct" required></select>
+    <select id="mType" required>
+      <option value="IN">Entrada (IN)</option>
+      <option value="OUT">Salida (OUT)</option>
+    </select>
+    <input id="mQty" type="number" min="1" placeholder="Cantidad" required />
+    <input id="mNote" placeholder="Observación (opcional)" />
+    <button type="submit">Registrar</button>
+    <span id="moveMsg"></span>
+  </form>
+
+  <button id="btnLoadMoves">Cargar historial</button>
+  <div id="movesList">—</div>
+</section>
+
+
+
 
   <script type="module" src="/src/main.ts"></script>
 </body>
