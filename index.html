@@ -1,61 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Inventario Heladería</title>
-</head>
-<body>
-  <h1>Inventario – Helado Artesanal Poche 🍦</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Inventario</title>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+  </head>
 
-  <section>
-    <h2>Autenticación</h2>
-    <input id="email" placeholder="Correo electrónico" />
-    <input id="password" type="password" placeholder="Contraseña" />
-    <button id="btnSignup">Registrarse</button>
-    <button id="btnLogin">Iniciar sesión</button>
-    <p id="authStatus"></p>
-  </section>
+  <body>
+    <div id="app">
+      <h1>📦 Sistema de Inventario</h1>
 
-<section>
-  <h2>Productos</h2>
-  <form id="frmProduct" style="margin-bottom:12px;">
-    <input id="pId" type="hidden" />
-    <input id="pSku" placeholder="SKU " required />
-    <input id="pName" placeholder="Nombre del producto" required />
-    <input id="pPrice" placeholder="Precio del producto" required />
-    <input id="pStock" type="number" min="0" placeholder="Stock (opcional)" />
-    <button type="submit">Guardar</button>
-    <button type="button" id="btnCancelEdit" style="display:none;">Cancelar</button>
-    <span id="prodMsg"></span>
-  </form>
+      <!-- === AUTENTICACIÓN === -->
+      <section id="auth" class="card">
+        <h2>Acceso</h2>
+        <input type="email" id="email" placeholder="Correo electrónico" />
+        <input type="password" id="password" placeholder="Contraseña" />
+        <div class="btn-group">
+          <button id="btnSignup">Registrarse</button>
+          <button id="btnLogin">Iniciar sesión</button>
+        </div>
+        <p id="authStatus"></p>
+      </section>
 
-  <button id="btnLoad">Cargar productos</button>
-  <div id="productList">—</div>
-</section>
+      <!-- === PRODUCTOS === -->
+      <section id="productos" class="card">
+        <h2>Gestión de Productos</h2>
 
-<section>
-  <h2>Movimientos de inventario</h2>
+        <form id="frmProduct" class="form-grid">
+          <input type="hidden" id="pId" />
+          <input id="pSku" placeholder="SKU" required />
+          <input id="pName" placeholder="Nombre" required />
+          <input id="pPrice" type="number" placeholder="Precio ₡" required />
+          <input id="pStock" type="number" placeholder="Stock inicial" required />
+          <button type="submit">Guardar</button>
+          <button type="button" id="btnCancelEdit" style="display:none;">Cancelar</button>
+        </form>
 
-  <form id="frmMove" style="margin-bottom:12px;">
-    <select id="mProduct" required></select>
-    <select id="mType" required>
-      <option value="IN">Entrada (IN)</option>
-      <option value="OUT">Salida (OUT)</option>
-    </select>
-    <input id="mQty" type="number" min="1" placeholder="Cantidad" required />
-    <input id="mNote" placeholder="Observación (opcional)" />
-    <button type="submit">Registrar</button>
-    <span id="moveMsg"></span>
-  </form>
+        <p id="prodMsg"></p>
+        <div class="btn-group">
+          <button id="btnLoad">Cargar productos</button>
+        </div>
 
-  <button id="btnLoadMoves">Cargar historial</button>
-  <div id="movesList">—</div>
-</section>
+        <div id="productList"></div>
+      </section>
 
+      <!-- === MOVIMIENTOS === -->
+      <section id="movimientos" class="card">
+        <h2>Registro de Movimientos</h2>
 
+        <form id="frmMove" class="form-grid">
+          <select id="mProduct"></select>
+          <select id="mType">
+            <option value="IN">Entrada</option>
+            <option value="OUT">Salida</option>
+          </select>
+          <input id="mQty" type="number" placeholder="Cantidad" />
+          <input id="mNote" placeholder="Observación" />
+          <button type="submit">Registrar movimiento</button>
+        </form>
 
+        <p id="moveMsg"></p>
+        <div class="btn-group">
+          <button id="btnLoadMoves">Ver movimientos</button>
+        </div>
 
-  <script type="module" src="/src/main.ts"></script>
-</body>
+        <div id="movesList"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

@@ -1,0 +1,112 @@
+:root {
+  --bg: #f4f6f9;
+  --card-bg: #fff;
+  --text: #222;
+  --accent: #0366d6;
+  --danger: #e63946;
+  --success: #2a9d8f;
+  --border: #ddd;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+input,
+select {
+  flex: 1 1 200px;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #024c9e;
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+p {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background: #eef3f9;
+  font-weight: 600;
+}
+
+.success {
+  color: var(--success);
+}
+
+.error {
+  color: var(--danger);
+}
