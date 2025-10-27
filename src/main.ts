@@ -1,14 +1,14 @@
 import { supabase } from "@services/supabase";
 import {
   registrarMovimiento,
-  cargarMovimientos
+  cargarMovimientos,
 } from "@controllers/movimientoController";
 import {
   getProducts,
   saveProduct,
   deleteProduct,
   fillProductsSelect,
-  parseProductForm
+  parseProductForm,
 } from "@controllers/productController";
 import { showMessage, $ } from "@utils/helpers";
 
@@ -16,22 +16,48 @@ import { showMessage, $ } from "@utils/helpers";
 let movesVisible = false;
 
 // =================== AUTH ===================
+
+// --- Sign Up ---
 $("#btnSignup")?.addEventListener("click", async () => {
   const email = ($("#email") as HTMLInputElement).value.trim();
   const password = ($("#password") as HTMLInputElement).value.trim();
   const { error } = await supabase.auth.signUp({ email, password });
-  showMessage("authStatus", error ? error.message : "Revisa tu correo para confirmar 📧");
+  showMessage(
+    "authStatus",
+    error ? error.message : "Revisa tu correo para confirmar 📧"
+  );
 });
 
+// --- Login ---
 $("#btnLogin")?.addEventListener("click", async () => {
   const email = ($("#email") as HTMLInputElement).value.trim();
   const password = ($("#password") as HTMLInputElement).value.trim();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  showMessage("authStatus", error ? error.message : "Sesión iniciada ✅");
+  if (error) {
+    showMessage("authStatus", error.message, "error");
+  } else {
+    showMessage("authStatus", "Sesión iniciada ✅");
+    setTimeout(() => {
+      window.location.href = "/dashboard.html"; // 👈 redirige al dashboard
+    }, 800);
+  }
 });
 
+// --- Verificar sesión activa ---
 supabase.auth.getSession().then(({ data }) => {
-  if (data.session) showMessage("authStatus", "Sesión activa ✅");
+  const currentPage = window.location.pathname;
+
+  if (data.session) {
+    // Si hay sesión y el usuario está en login, lo mandamos al dashboard
+    if (currentPage.includes("login") || currentPage.includes("index")) {
+      window.location.href = "/dashboard.html";
+    }
+  } else {
+    // Si NO hay sesión y está en dashboard, redirigir al login
+    if (currentPage.includes("dashboard")) {
+      window.location.href = "/login.html";
+    }
+  }
 });
 
 // =================== PRODUCTOS ===================
@@ -62,7 +88,9 @@ document.getElementById("btnLoad")?.addEventListener("click", refreshProducts);
 
 // === Renderizar tabla de productos ===
 function renderProducts(list: any[]) {
-  const rows = list.map(p => `
+  const rows = list
+    .map(
+      (p) => `
     <tr data-id="${p.id}" data-sku="${p.sku}" data-name="${p.name}"
         data-price="${p.price_cents}" data-stock="${p.stock}">
       <td>${p.id}</td>
@@ -75,7 +103,9 @@ function renderProducts(list: any[]) {
         <button class="btnDelete">Eliminar</button>
       </td>
     </tr>
-  `).join("");
+  `
+    )
+    .join("");
 
   $("#productList")!.innerHTML = `
     <table border="1" cellpadding="6">
@@ -84,10 +114,12 @@ function renderProducts(list: any[]) {
     </table>
   `;
 
-  document.querySelectorAll("#productList .btnEdit")
-    .forEach(btn => btn.addEventListener("click", onEdit as any));
-  document.querySelectorAll("#productList .btnDelete")
-    .forEach(btn => btn.addEventListener("click", onDelete as any));
+  document
+    .querySelectorAll("#productList .btnEdit")
+    .forEach((btn) => btn.addEventListener("click", onEdit as any));
+  document
+    .querySelectorAll("#productList .btnDelete")
+    .forEach((btn) => btn.addEventListener("click", onDelete as any));
 }
 
 function onEdit(this: HTMLElement) {
@@ -95,7 +127,9 @@ function onEdit(this: HTMLElement) {
   ($("#pId") as HTMLInputElement).value = tr.dataset.id!;
   ($("#pSku") as HTMLInputElement).value = tr.dataset.sku!;
   ($("#pName") as HTMLInputElement).value = tr.dataset.name!;
-  ($("#pPrice") as HTMLInputElement).value = (Number(tr.dataset.price) / 100).toString();
+  ($("#pPrice") as HTMLInputElement).value = (
+    Number(tr.dataset.price) / 100
+  ).toString();
   ($("#pStock") as HTMLInputElement).value = tr.dataset.stock!;
   $("#btnCancelEdit")?.setAttribute("style", "display:inline-block;");
   showMessage("prodMsg", "Editando producto…");
@@ -106,7 +140,8 @@ async function onDelete(this: HTMLElement) {
   const tr = this.closest("tr")!;
   const id = Number(tr.dataset.id);
   const sku = tr.dataset.sku;
-  if (!confirm(`¿Eliminar producto ${sku}? Esta acción no se puede deshacer.`)) return;
+  if (!confirm(`¿Eliminar producto ${sku}? Esta acción no se puede deshacer.`))
+    return;
   try {
     const msg = await deleteProduct(id);
     showMessage("prodMsg", msg);
@@ -131,10 +166,17 @@ document.getElementById("btnLoadMoves")?.addEventListener("click", async () => {
 document.getElementById("frmMove")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const productId = Number((document.getElementById("mProduct") as HTMLSelectElement).value);
-  const tipo = (document.getElementById("mType") as HTMLSelectElement).value as "IN" | "OUT";
-  const cantidad = Number((document.getElementById("mQty") as HTMLInputElement).value);
-  const observacion = (document.getElementById("mNote") as HTMLInputElement).value.trim();
+  const productId = Number(
+    (document.getElementById("mProduct") as HTMLSelectElement).value
+  );
+  const tipo = (document.getElementById("mType") as HTMLSelectElement)
+    .value as "IN" | "OUT";
+  const cantidad = Number(
+    (document.getElementById("mQty") as HTMLInputElement).value
+  );
+  const observacion = (
+    document.getElementById("mNote") as HTMLInputElement
+  ).value.trim();
 
   if (!productId || !cantidad || cantidad <= 0) {
     showMessage("moveMsg", "Completa todos los campos", "error");
@@ -163,16 +205,20 @@ async function renderMovimientos() {
           <th>ID</th><th>Tipo</th><th>Producto</th><th>Cantidad</th>
           <th>Fecha</th><th>Observación</th><th>Usuario</th>
         </tr>
-        ${data.map(m => `
+        ${data
+          .map(
+            (m) => `
           <tr>
             <td>${m.id}</td>
             <td>${m.tipo}</td>
             <td>${m.products?.name || "—"}</td>
             <td>${m.cantidad}</td>
-            <td>${new Date(m.fecha + "Z").toLocaleString()}</td>
+            <td>${new Date(m.fecha).toLocaleString("es-CR", { timeZone: "America/Costa_Rica" })}</td>
             <td>${m.observacion || ""}</td>
             <td>${m.usuario_email || "—"}</td>
-          </tr>`).join("")}
+          </tr>`
+          )
+          .join("")}
       </table>`;
   } catch (err: any) {
     showMessage("moveMsg", err.message, "error");

@@ -1,0 +1,24 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f7f7f7;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+header {
+  background: #0078ff;
+  color: white;
+  padding: 2rem 1rem;
+}
+.btn {
+  background: #0078ff;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover {
+  background: #005fcc;
+}

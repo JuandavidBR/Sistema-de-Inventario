@@ -3,72 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistema de Inventario</title>
-    <link rel="stylesheet" href="/src/styles/style.css" />
+    <title>InventarioPlus</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
-
   <body>
-    <div id="app">
-      <h1>📦 Sistema de Inventario</h1>
+    <header>
+      <h1>InventarioPlus</h1>
+      <p>Gestiona tus productos, compras y ventas fácilmente 💼</p>
+      <img src="/src/assets/logo.png" alt="Logo" style="max-width: 200px" />
+    </header>
 
-      <!-- === AUTENTICACIÓN === -->
-      <section id="auth" class="card">
-        <h2>Acceso</h2>
-        <input type="email" id="email" placeholder="Correo electrónico" />
-        <input type="password" id="password" placeholder="Contraseña" />
-        <div class="btn-group">
-          <button id="btnSignup">Registrarse</button>
-          <button id="btnLogin">Iniciar sesión</button>
-        </div>
-        <p id="authStatus"></p>
+    <main>
+      <section>
+        <h2>¿Qué puedes hacer?</h2>
+        <ul>
+          <li>Registrar y editar productos.</li>
+          <li>Registrar movimientos de entrada y salida.</li>
+          <li>Controlar tus inventarios en tiempo real.</li>
+        </ul>
       </section>
 
-      <!-- === PRODUCTOS === -->
-      <section id="productos" class="card">
-        <h2>Gestión de Productos</h2>
-
-        <form id="frmProduct" class="form-grid">
-          <input type="hidden" id="pId" />
-          <input id="pSku" placeholder="SKU" required />
-          <input id="pName" placeholder="Nombre" required />
-          <input id="pPrice" type="number" placeholder="Precio ₡" required />
-          <input id="pStock" type="number" placeholder="Stock inicial" required />
-          <button type="submit">Guardar</button>
-          <button type="button" id="btnCancelEdit" style="display:none;">Cancelar</button>
-        </form>
-
-        <p id="prodMsg"></p>
-        <div class="btn-group">
-          <button id="btnLoad">Cargar productos</button>
-        </div>
-
-        <div id="productList"></div>
-      </section>
-
-      <!-- === MOVIMIENTOS === -->
-      <section id="movimientos" class="card">
-        <h2>Registro de Movimientos</h2>
-
-        <form id="frmMove" class="form-grid">
-          <select id="mProduct"></select>
-          <select id="mType">
-            <option value="IN">Entrada</option>
-            <option value="OUT">Salida</option>
-          </select>
-          <input id="mQty" type="number" placeholder="Cantidad" />
-          <input id="mNote" placeholder="Observación" />
-          <button type="submit">Registrar movimiento</button>
-        </form>
-
-        <p id="moveMsg"></p>
-        <div class="btn-group">
-          <button id="btnLoadMoves">Ver movimientos</button>
-        </div>
-
-        <div id="movesList"></div>
-      </section>
-    </div>
-
-    <script type="module" src="/src/main.ts"></script>
+      <div class="actions">
+        <a href="login.html" class="btn">Iniciar sesión / Registrarse</a>
+      </div>
+    </main>
   </body>
 </html>

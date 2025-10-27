@@ -1,0 +1,47 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #eef3f9;
+}
+.login-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+#authTabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+#authTabs button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+}
+#authTabs .active {
+  background: #0078ff;
+  color: white;
+}
+input {
+  width: 100%;
+  margin-bottom: 0.7rem;
+  padding: 0.5rem;
+}
+button {
+  width: 100%;
+  padding: 0.6rem;
+  background: #0078ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+.msg {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
