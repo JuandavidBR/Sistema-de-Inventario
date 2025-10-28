@@ -3,37 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | InventarioPlus</title>
+    <title>Dashboard | Heladería RICOCHE</title>
     <link rel="stylesheet" href="/src/styles/dashboard.css" />
   </head>
   <body>
-    <header>
+    <header class="topbar">
       <h1>Panel de Control</h1>
-      <button id="btnLogout">Cerrar sesión</button>
+      <button id="btnLogout" class="btn-logout">Cerrar sesión</button>
     </header>
 
-    <main>
-      <section id="productos">
+    <main class="dashboard">
+      <section class="card">
         <h2>Productos</h2>
-        <form id="frmProduct">
+        <form id="frmProduct" class="form">
           <input type="hidden" id="pId" />
           <input type="text" id="pSku" placeholder="SKU" required />
           <input type="text" id="pName" placeholder="Nombre" required />
           <input type="number" id="pPrice" placeholder="Precio (₡)" required />
           <input type="number" id="pStock" placeholder="Stock inicial" />
-          <button type="submit">Guardar</button>
-          <button type="button" id="btnCancelEdit" style="display:none;">Cancelar</button>
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar</button>
+            <button type="button" id="btnCancelEdit" class="btn-cancel" style="display:none;">Cancelar</button>
+          </div>
         </form>
         <p id="prodMsg" class="msg"></p>
-        <button id="btnLoad">Cargar productos</button>
+        <button id="btnLoad" class="btn-secondary">Cargar productos</button>
         <div id="productList"></div>
       </section>
 
-      <hr />
-
-      <section id="movimientos">
+      <section class="card">
         <h2>Movimientos</h2>
-        <form id="frmMove">
+        <form id="frmMove" class="form">
           <select id="mProduct"></select>
           <select id="mType">
             <option value="IN">Compra / Entrada</option>
@@ -41,10 +41,10 @@
           </select>
           <input type="number" id="mQty" placeholder="Cantidad" required />
           <input type="text" id="mNote" placeholder="Observación" />
-          <button type="submit">Registrar</button>
+          <button type="submit" class="btn">Registrar</button>
         </form>
         <p id="moveMsg" class="msg"></p>
-        <button id="btnLoadMoves">Ver movimientos</button>
+        <button id="btnLoadMoves" class="btn-secondary">Ver movimientos</button>
         <div id="movesList"></div>
       </section>
     </main>
@@ -55,7 +55,7 @@
       const btnLogout = document.getElementById("btnLogout");
       btnLogout?.addEventListener("click", async () => {
         await supabase.auth.signOut();
-        window.location.href = "dashboard.html";
+        window.location.href = "login.html";
       });
     </script>
   </body>

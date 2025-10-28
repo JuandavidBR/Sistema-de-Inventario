@@ -1,24 +1,136 @@
+/* Estilo general */
 body {
-  font-family: system-ui, sans-serif;
-  background: #f7f7f7;
-  color: #333;
+  font-family: 'Poppins', system-ui, sans-serif;
   margin: 0;
+  background: #0f0f1a;
+  color: #e0e0ff;
+  line-height: 1.6;
   text-align: center;
 }
-header {
-  background: #0078ff;
-  color: white;
-  padding: 2rem 1rem;
+
+/* Encabezado hero */
+.hero {
+  position: relative;
+  background: url('/src/assets/fondo-heladeria.jpg') center/cover no-repeat;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.hero .overlay {
+  background: rgba(10, 10, 25, 0.7);
+  padding: 2rem;
+  border-radius: 1rem;
+}
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.hero span {
+  color: #5b8aff;
+}
+.hero p {
+  font-size: 1.1rem;
+  color: #b8b8ff;
+}
+
+/* Contenedor principal */
+.container {
+  padding: 3rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Tarjetas principales */
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+.card {
+  background: #161628;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 280px;
+  transition: transform 0.3s, background 0.3s;
+  box-shadow: 0 0 15px rgba(90, 90, 255, 0.2);
+}
+.card:hover {
+  background: #1e1e36;
+  transform: translateY(-6px);
+}
+.icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Sección de información */
+.about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.about .text {
+  max-width: 450px;
+  text-align: left;
+}
+.about h2 {
+  color: #7a9bff;
+}
+.about img {
+  width: 350px;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(80, 80, 255, 0.3);
+}
+
+/* Botón */
 .btn {
-  background: #0078ff;
-  color: white;
-  padding: 0.7rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  text-decoration: none;
   display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(90deg, #6c63ff, #3b3be0);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
 }
 .btn:hover {
-  background: #005fcc;
+  background: linear-gradient(90deg, #7b74ff, #4c4cff);
+}
+
+/* Claves de gestión */
+.keys {
+  margin-top: 4rem;
+}
+.key-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.key-card {
+  background: #1a1a2f;
+  padding: 1.2rem;
+  border-radius: 0.8rem;
+  width: 280px;
+  box-shadow: 0 0 10px rgba(90, 90, 255, 0.15);
+}
+.key-card h4 {
+  color: #7f91ff;
+  margin-bottom: 0.5rem;
+}
+
+/* Pie de página */
+footer {
+  background: #101025;
+  color: #a5a5ff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-top: 3rem;
 }

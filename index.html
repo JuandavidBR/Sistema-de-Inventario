@@ -3,29 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InventarioPlus</title>
+    <title>Gestión de Inventario | Heladería RICOCHE</title>
     <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
   <body>
-    <header>
-      <h1>InventarioPlus</h1>
-      <p>Gestiona tus productos, compras y ventas fácilmente 💼</p>
-      <img src="/src/assets/logo.png" alt="Logo" style="max-width: 200px" />
+    <header class="hero">
+      <div class="overlay">
+        <h1>Gestión de Inventario en <span>Heladería RICOCHE</span></h1>
+        <p>Control total del inventario de tu negocio de helados.</p>
+      </div>
     </header>
 
-    <main>
-      <section>
-        <h2>¿Qué puedes hacer?</h2>
-        <ul>
-          <li>Registrar y editar productos.</li>
-          <li>Registrar movimientos de entrada y salida.</li>
-          <li>Controlar tus inventarios en tiempo real.</li>
-        </ul>
+    <main class="container">
+      <section class="features">
+        <div class="card">
+          <div class="icon">📋</div>
+          <h3>Registro detallado</h3>
+          <p>Gestiona helados y actualiza el catálogo fácilmente.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🔄</div>
+          <h3>Control de movimientos</h3>
+          <p>Registra entradas y salidas para seguimiento preciso.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📊</div>
+          <h3>Reportes en tiempo real</h3>
+          <p>Accede a existencias y toma decisiones rápidas.</p>
+        </div>
       </section>
 
-      <div class="actions">
-        <a href="login.html" class="btn">Iniciar sesión / Registrarse</a>
-      </div>
+      <section class="about">
+        <div class="text">
+          <h2>Gestión simple y eficaz</h2>
+          <p>
+            Controla productos, compras y ventas de forma sencilla.  
+            Optimizado para heladerías, sin complicaciones.
+          </p>
+          <a href="login.html" class="btn">Iniciar sesión</a>
+        </div>
+        <div class="image">
+          <img src="/src/assets/Logo RICOCHE.svg" alt="Helados coloridos" />
+        </div>
+      </section>
+
+      <section class="keys">
+        <h2>Claves de nuestra gestión de inventario</h2>
+        <div class="key-cards">
+          <div class="key-card">
+            <h4>🧭 Organización intuitiva</h4>
+            <p>Accede desde cualquier dispositivo con un diseño moderno.</p>
+          </div>
+          <div class="key-card">
+            <h4>⚡ Actualización instantánea</h4>
+            <p>Cambios en tiempo real para evitar confusiones.</p>
+          </div>
+          <div class="key-card">
+            <h4>🔐 Control de acceso seguro</h4>
+            <p>Datos protegidos, información confiable.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          <strong>Heladería RICOCHE</strong> — Gestiona tu inventario con confianza.
+          Simplifica tu trabajo diario.
+        </p>
+      </footer>
     </main>
   </body>
 </html>
