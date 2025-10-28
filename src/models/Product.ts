@@ -1,17 +1,7 @@
-export class Product {
-  constructor(
-    public id: number,
-    public sku: string,
-    public name: string,
-    public price_cents: number,
-    public stock: number
-  ) {}
-
-  get formattedPrice(): string {
-    return `₡${(this.price_cents / 100).toFixed(2)}`;
-  }
-
-  updateStock(delta: number) {
-    this.stock += delta;
-  }
+export interface Product {
+  id: number;
+  sku: string;
+  name: string;
+  price_cents: number;
+  stock: number;
 }

@@ -1,5 +1,5 @@
 import { supabase } from "@services/supabase";
-import { Product } from "@models/Product";
+import type { Product } from "@models/Product";
 import { parseMoneyToCents } from "@utils/formatters";
 import { validateSKU } from "@utils/validators";
 
@@ -7,27 +7,30 @@ import { validateSKU } from "@utils/validators";
 export async function saveProduct(
   product: Partial<Product>
 ): Promise<string> {
-  const { id, sku, name, price_cents, stock } = product;
+  const { id, sku, name, price_cents } = product;
 
   if (!sku || !validateSKU(sku)) throw new Error("SKU inválido (usa MAYÚSCULAS, números y '-')");
   if (!name) throw new Error("Nombre requerido");
   if (price_cents == null || price_cents < 0) throw new Error("Precio inválido");
 
   if (id) {
+    // When updating product metadata we do NOT modify stock here. Stock
+    // must be changed only via movimientos (entradas/salidas).
     const { error } = await supabase.from("products").update({
       sku,
       name,
       price_cents,
-      stock,
     }).eq("id", id);
     if (error) throw error;
     return "Producto actualizado ✅";
   } else {
+    // New products start with zero stock. Stock adjustments must be made
+    // through 'entradas' (movimientos of type IN).
     const { error } = await supabase.from("products").insert([{
       sku,
       name,
       price_cents,
-      stock: stock ?? 0,
+      stock: 0,
     }]);
     if (error) throw error;
     return "Producto creado ✅";
@@ -77,9 +80,6 @@ export function parseProductForm(): Partial<Product> {
   const sku = (document.getElementById("pSku") as HTMLInputElement).value.trim().toUpperCase();
   const name = (document.getElementById("pName") as HTMLInputElement).value.trim();
   const priceInput = (document.getElementById("pPrice") as HTMLInputElement).value;
-  const stockStr = (document.getElementById("pStock") as HTMLInputElement).value.trim();
   const price_cents = parseMoneyToCents(priceInput);
-  const stock = stockStr ? Math.max(0, Number(stockStr)) : undefined;
-
-  return { id, sku, name, price_cents, stock };
+  return { id, sku, name, price_cents };
 }

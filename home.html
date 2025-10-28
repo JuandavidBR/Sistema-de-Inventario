@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | Heladería RICOCHE</title>
+    <link rel="stylesheet" href="/src/styles/dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Heladería RICOCHE — Home</h1>
+      <button id="btnLogout" class="btn-logout">Cerrar sesión</button>
+    </header>
+
+    <main class="home">
+      <section class="card">
+        <h2>Bienvenidos al sistema de inventario de Heladería RICOCHE</h2>
+        <p>Gestiona productos y movimientos desde el menú.</p>
+        <div class="home-actions">
+          <button id="btnToProducts" class="btn">Productos</button>
+          <button id="btnToEntrada" class="btn">Registrar Entrada</button>
+          <button id="btnToSalida" class="btn">Registrar Salida</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Productos actuales</h2>
+        <p>Lista de productos</p>
+        <div id="productList"></div>
+      </section>
+
+      <section class="card">
+        <h2>Últimos movimientos</h2>
+        <p>Registros recientes de entradas y salidas.</p>
+        <div id="movesList"></div>
+        <div class="form-actions">
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/pages/homePage.ts"></script>
+    <script type="module">
+      import { supabase } from "@services/supabase";
+      const btnLogout = document.getElementById("btnLogout");
+      btnLogout?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
+      });
+    </script>
+  </body>

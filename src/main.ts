@@ -38,7 +38,7 @@ $("#btnLogin")?.addEventListener("click", async () => {
   } else {
     showMessage("authStatus", "Sesión iniciada ✅");
     setTimeout(() => {
-      window.location.href = "/dashboard.html"; // 👈 redirige al dashboard
+      window.location.href = "/home.html"; // 👈 redirige al home
     }, 800);
   }
 });
@@ -48,13 +48,13 @@ supabase.auth.getSession().then(({ data }) => {
   const currentPage = window.location.pathname;
 
   if (data.session) {
-    // Si hay sesión y el usuario está en login, lo mandamos al dashboard
+    // Si hay sesión y el usuario está en login, lo mandamos al home
     if (currentPage.includes("login") || currentPage.includes("index")) {
-      window.location.href = "/dashboard.html";
+      window.location.href = "/home.html";
     }
   } else {
     // Si NO hay sesión y está en dashboard, redirigir al login
-    if (currentPage.includes("dashboard")) {
+    if (currentPage.includes("home") || currentPage.includes("dashboard")) {
       window.location.href = "/login.html";
     }
   }
@@ -130,7 +130,6 @@ function onEdit(this: HTMLElement) {
   ($("#pPrice") as HTMLInputElement).value = (
     Number(tr.dataset.price) / 100
   ).toString();
-  ($("#pStock") as HTMLInputElement).value = tr.dataset.stock!;
   $("#btnCancelEdit")?.setAttribute("style", "display:inline-block;");
   showMessage("prodMsg", "Editando producto…");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -211,7 +210,7 @@ async function renderMovimientos() {
           <tr>
             <td>${m.id}</td>
             <td>${m.tipo}</td>
-            <td>${m.products?.name || "—"}</td>
+            <td>${Array.isArray(m.products) ? (m.products[0]?.name ?? "—") : (m.products?.name ?? "—")}</td>
             <td>${m.cantidad}</td>
             <td>${new Date(m.fecha).toLocaleString("es-CR", { timeZone: "America/Costa_Rica" })}</td>
             <td>${m.observacion || ""}</td>

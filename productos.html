@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos | Heladería RICOCHE</title>
+    <link rel="stylesheet" href="/src/styles/dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Productos</h1>
+      <button id="btnLogout" class="btn-logout">Cerrar sesión</button>
+    </header>
+
+    <main class="page">
+      <section class="card">
+        <form id="frmProduct" class="form">
+          <input type="hidden" id="pId" />
+          <input type="text" id="pSku" placeholder="SKU" required />
+          <input type="text" id="pName" placeholder="Nombre" required />
+          <input type="number" id="pPrice" placeholder="Precio (₡)" required />
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar</button>
+            <button type="button" id="btnCancelEdit" class="btn" style="display:none;">Cancelar</button>
+            <button type="button" id="btnBack" class="btn">Atrás</button>
+          </div>
+        </form>
+        <p id="prodMsg" class="msg"></p>
+        <button id="btnLoad" class="btn">Cargar productos</button>
+        <div id="productList"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/pages/productosPage.ts"></script>
+    <script type="module">
+      import { supabase } from "@services/supabase";
+      document.getElementById("btnLogout")?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
+      });
+      document.getElementById("btnBack")?.addEventListener("click", () => {
+        window.location.href = "home.html";
+      });
+    </script>
+  </body>
+</html>

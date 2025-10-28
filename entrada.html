@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrar Entrada | Heladería RICOCHE</title>
+    <link rel="stylesheet" href="/src/styles/dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Registrar Entrada</h1>
+      <button id="btnLogout" class="btn-logout">Cerrar sesión</button>
+    </header>
+
+    <main class="page">
+      <section class="card">
+        <form id="frmMove" class="form">
+          <select id="mProduct"></select>
+          <input type="number" id="mQty" placeholder="Cantidad" required />
+          <input type="text" id="mNote" placeholder="Observación" />
+          <div class="form-actions">
+            <button type="submit" class="btn">Registrar Entrada</button>
+            <button type="button" id="btnBack" class="btn">Atrás</button>
+          </div>
+        </form>
+        <p id="moveMsg" class="msg"></p>
+      </section>
+    </main>
+
+    <script type="module" src="/src/pages/entradaPage.ts"></script>
+    <script type="module">
+      import { supabase } from "@services/supabase";
+      document.getElementById("btnLogout")?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "login.html";
+      });
+      document.getElementById("btnBack")?.addEventListener("click", () => {
+        window.location.href = "home.html";
+      });
+    </script>
+  </body>
+</html>

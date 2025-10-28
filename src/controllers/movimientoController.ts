@@ -1,5 +1,5 @@
 import { supabase } from "@services/supabase";
-import { Movimiento } from "@models/Movimiento";
+import type { Movimiento } from "@models/Movimiento";
 
 /**
  * Registrar un nuevo movimiento y actualizar el stock
